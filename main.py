@@ -4,8 +4,8 @@ import requests
 import json
 import os
 
-TOKEN = os.getenv("TOKEN")
-CHANNEL_ID = 123456789123456789  # coloca o ID do canal aqui
+TOKEN = os.getenv("MTQ5MjAzMzMxODY1OTgyMTYxOQ.GCWike.9D6O8qGlZ5l86NBVdFS3O0Fko5JmCkBTTDF254");
+CHANNEL_ID = 1492203477689176144  # COLOCA O ID DO CANAL
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
@@ -28,14 +28,33 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 API
+# 🌐 API (COM BYPASS)
 # ========================
+
+session = requests.Session()
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Accept": "application/json, text/plain, */*",
+    "Referer": "https://rubinot.com.br/worlds/Tenebrium",
+    "Origin": "https://rubinot.com.br",
+    "Connection": "keep-alive"
+}
 
 def get_online_players():
     try:
         url = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
-        data = requests.get(url).json()
-        return [p["name"] for p in data["players"]]
+
+        response = session.get(url, headers=headers, timeout=10)
+
+        if response.status_code != 200:
+            print("Erro status:", response.status_code)
+            return []
+
+        data = response.json()
+
+        return [p["name"] for p in data.get("players", [])]
+
     except Exception as e:
         print("Erro API:", e)
         return []
@@ -63,13 +82,20 @@ def embed_hunted(player, action, user_id):
     )
 
 # ========================
-# 🚀 EVENTO READY
+# 🚀 READY
 # ========================
 
 @bot.event
 async def on_ready():
+    global last_online
+
     print(f"🔥 Bot online: {bot.user}")
+
     await bot.change_presence(activity=discord.Game(name="caçando players 👀"))
+
+    # evita flood ao iniciar
+    last_online = set(get_online_players())
+
     check_online.start()
 
 # ========================
@@ -84,15 +110,14 @@ async def check_online():
     channel = bot.get_channel(CHANNEL_ID)
 
     if not channel:
+        print("Canal não encontrado")
         return
 
     for player in tracked_players:
 
-        # LOGOU
         if player in current and player not in last_online:
             await channel.send(f"🟢 {player} LOGOU")
 
-        # DESLOGOU
         if player not in current and player in last_online:
             await channel.send(f"🔴 {player} DESLOGOU")
 
@@ -127,9 +152,8 @@ async def list(ctx):
     else:
         await ctx.send("🎯 HUNTED:\n" + "\n".join(tracked_players))
 
-
 # ========================
 # ▶️ START
 # ========================
 
-bot.run("MTQ5MjAzMzMxODY1OTgyMTYxOQ.GCWike.9D6O8qGlZ5l86NBVdFS3O0Fko5JmCkBTTDF254")
+bot.run(TOKEN)
