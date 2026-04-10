@@ -14,6 +14,18 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 FILE = "players.json"
 
 tracked_players = set()
+
+def safe_add(name):
+    if not isinstance(name, str):
+        name = str(name)
+
+    name = name.strip()
+
+    if name.startswith("<coroutine") or "coroutine" in name:
+        return False
+
+    tracked_players.add(name)
+    return True
 online_players = set()
 
 # ------------------ LOAD / SAVE ------------------
@@ -71,10 +83,14 @@ async def on_ready():
 
 @bot.command()
 async def track(ctx, *, name):
-    name = str(name).strip()
-    tracked_players.add(name)
+    ok = safe_add(name)
+
+    if not ok:
+        await ctx.send("❌ Nome inválido")
+        return
+
     save_players()
-    await ctx.send(f"✅ {name} adicionado ao tracking")
+    await ctx.send(f"✅ {name} adicionado")
 
 @bot.command()
 async def untrack(ctx, *, name):
