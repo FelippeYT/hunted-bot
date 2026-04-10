@@ -1,16 +1,16 @@
 import discord
 from discord.ext import commands, tasks
-import cloudscraper
+import requests
 import json
 import os
-from bs4 import BeautifulSoup
 
 # ========================
 # ⚙️ CONFIG
 # ========================
 
 TOKEN = os.getenv("TOKEN")
-CHANNEL_ID = 1492203477689176144  # seu canal
+CF_CLEARANCE = os.getenv("CF_CLEARANCE")  # 👈 COOKIE AQUI
+CHANNEL_ID = 1492203477689176144
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -36,37 +36,42 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 SCRAPER (ANTI 403)
+# 🌐 SESSION
 # ========================
 
-scraper = cloudscraper.create_scraper()
+session = requests.Session()
+
+# ========================
+# 🌐 API RUBINOT (COM COOKIE)
+# ========================
 
 def get_online_players():
     try:
-        url = "https://rubinot.com.br/worlds/Tenebrium"
+        url = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
 
-        res = scraper.get(url, timeout=15)
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "*/*",
+            "Referer": "https://rubinot.com.br/worlds/Tenebrium",
+        }
+
+        cookies = {
+            "cf_clearance": CF_CLEARANCE
+        }
+
+        res = session.get(url, headers=headers, cookies=cookies, timeout=10)
 
         print("Status:", res.status_code)
 
         if res.status_code != 200:
             return []
 
-        soup = BeautifulSoup(res.text, "html.parser")
+        data = res.json()
 
-        players = []
-
-        for row in soup.select("table tbody tr"):
-            cols = row.find_all("td")
-
-            if cols:
-                name = cols[0].text.strip()
-                players.append(name)
-
-        return players
+        return [p["name"] for p in data.get("players", [])]
 
     except Exception as e:
-        print("Erro scraping:", e)
+        print("Erro API:", e)
         return []
 
 # ========================
