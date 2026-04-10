@@ -4,10 +4,14 @@ import requests
 import json
 import os
 
-TOKEN = os.getenv("TOKEN");
-CHANNEL_ID = 1492203477689176144  # COLOCA O ID DO CANAL
+TOKEN = os.getenv("TOKEN")
+CHANNEL_ID = 1492203477689176144  # seu canal
 
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+# ✅ INTENTS CORRETOS (SEM ERRO)
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ========================
 # 📁 STORAGE
@@ -28,17 +32,16 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 API (COM BYPASS)
+# 🌐 API
 # ========================
 
 session = requests.Session()
 
 headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "User-Agent": "Mozilla/5.0",
     "Accept": "application/json, text/plain, */*",
     "Referer": "https://rubinot.com.br/worlds/Tenebrium",
-    "Origin": "https://rubinot.com.br",
-    "Connection": "keep-alive"
+    "Origin": "https://rubinot.com.br"
 }
 
 def get_online_players():
@@ -48,7 +51,7 @@ def get_online_players():
         response = session.get(url, headers=headers, timeout=10)
 
         if response.status_code != 200:
-            print("Erro status:", response.status_code)
+            print("Erro API:", response.status_code)
             return []
 
         data = response.json()
@@ -135,7 +138,6 @@ async def track(ctx, *, name):
     embed = embed_hunted(name, "add", ctx.author.id)
     await ctx.send(embed=embed)
 
-
 @bot.command()
 async def untrack(ctx, *, name):
     tracked_players.discard(name)
@@ -143,7 +145,6 @@ async def untrack(ctx, *, name):
 
     embed = embed_hunted(name, "remove", ctx.author.id)
     await ctx.send(embed=embed)
-
 
 @bot.command()
 async def list(ctx):
