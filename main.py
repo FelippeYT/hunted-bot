@@ -4,7 +4,7 @@ import requests
 import json
 import os
 
-TOKEN = os.getenv("MTQ5MjAzMzMxODY1OTgyMTYxOQ.GCWike.9D6O8qGlZ5l86NBVdFS3O0Fko5JmCkBTTDF254");
+TOKEN = os.getenv("TOKEN");
 CHANNEL_ID = 1492203477689176144  # COLOCA O ID DO CANAL
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
