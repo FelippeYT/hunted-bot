@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands, tasks
+from discord import ui
 import requests
 import json
 import os
@@ -9,10 +10,11 @@ CHANNEL_ID = 1492203477689176144
 
 intents = discord.Intents.default()
 intents.message_content = True
+
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ========================
-# 📁 STORAGE
+# STORAGE
 # ========================
 
 def load_players():
@@ -30,69 +32,108 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 API
+# API (vai dar 403 às vezes)
 # ========================
-
-session = requests.Session()
-
-headers = {
-    "User-Agent": "Mozilla/5.0",
-    "Accept": "application/json",
-    "Referer": "https://rubinot.com.br/worlds/Tenebrium"
-}
 
 def get_online_players():
     try:
         url = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
 
-        res = session.get(url, headers=headers, timeout=10)
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://rubinot.com.br/worlds/Tenebrium"
+        }
 
-        print("Status:", res.status_code)
+        res = requests.get(url, headers=headers)
 
         if res.status_code != 200:
+            print("Status:", res.status_code)
             return []
 
         data = res.json()
         return [p["name"] for p in data.get("players", [])]
 
-    except Exception as e:
-        print("Erro API:", e)
+    except:
         return []
 
 # ========================
-# 🎨 EMBED
+# MODAL
 # ========================
 
-def embed_hunted(player, action, user_id):
-    return discord.Embed(
+class AddPlayerModal(ui.Modal, title="Adicionar Player"):
+    name = ui.TextInput(label="Nome do player")
+
+    async def on_submit(self, interaction: discord.Interaction):
+        player = str(self.name)
+
+        tracked_players.add(player)
+        save_players()
+
+        embed = discord.Embed(
+            title="🟢 ADICIONADO",
+            description=f"**{player}** foi adicionado",
+            color=0x00ff00
+        )
+
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+class RemovePlayerModal(ui.Modal, title="Remover Player"):
+    name = ui.TextInput(label="Nome do player")
+
+    async def on_submit(self, interaction: discord.Interaction):
+        player = str(self.name)
+
+        tracked_players.discard(player)
+        save_players()
+
+        embed = discord.Embed(
+            title="🔴 REMOVIDO",
+            description=f"**{player}** foi removido",
+            color=0xff0000
+        )
+
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+# ========================
+# VIEW (BOTÕES)
+# ========================
+
+class HuntedView(ui.View):
+
+    @ui.button(label="➕ Adicionar", style=discord.ButtonStyle.success)
+    async def add(self, interaction: discord.Interaction, button: ui.Button):
+        await interaction.response.send_modal(AddPlayerModal())
+
+    @ui.button(label="➖ Remover", style=discord.ButtonStyle.danger)
+    async def remove(self, interaction: discord.Interaction, button: ui.Button):
+        await interaction.response.send_modal(RemovePlayerModal())
+
+    @ui.button(label="📜 Lista", style=discord.ButtonStyle.secondary)
+    async def lista(self, interaction: discord.Interaction, button: ui.Button):
+        if not tracked_players:
+            msg = "📭 Nenhum player"
+        else:
+            msg = "\n".join(tracked_players)
+
+        await interaction.response.send_message(msg, ephemeral=True)
+
+# ========================
+# COMANDO PAINEL
+# ========================
+
+@bot.command()
+async def painel(ctx):
+    embed = discord.Embed(
         title="🗡️ HUNTED SYSTEM",
-        color=0x00ff00 if action == "add" else 0xff0000
-    ).add_field(
-        name="👤 Usuário",
-        value=f"<@{user_id}>"
-    ).add_field(
-        name="🎯 Player",
-        value=player
-    ).add_field(
-        name="📌 Status",
-        value="Adicionado" if action == "add" else "Removido"
+        description="Gerencie sua lista de hunted",
+        color=0x2f3136
     )
 
-# ========================
-# 🚀 READY
-# ========================
-
-@bot.event
-async def on_ready():
-    global last_online
-
-    print(f"🔥 Bot online: {bot.user}")
-
-    last_online = set(get_online_players())
-    check_online.start()
+    await ctx.send(embed=embed, view=HuntedView())
 
 # ========================
-# 🔁 LOOP
+# LOOP
 # ========================
 
 @tasks.loop(seconds=30)
@@ -103,7 +144,6 @@ async def check_online():
     channel = bot.get_channel(CHANNEL_ID)
 
     if not channel:
-        print("Canal não encontrado")
         return
 
     for player in tracked_players:
@@ -116,34 +156,20 @@ async def check_online():
     last_online = current
 
 # ========================
-# 📌 COMANDOS
+# READY
 # ========================
 
-@bot.command()
-async def track(ctx, *, name: str):
-    tracked_players.add(name)  # GARANTE STRING
-    save_players()
+@bot.event
+async def on_ready():
+    print(f"🔥 {bot.user} online")
 
-    await ctx.send(embed=embed_hunted(name, "add", ctx.author.id))
+    global last_online
+    last_online = set(get_online_players())
 
-
-@bot.command()
-async def untrack(ctx, *, name: str):
-    tracked_players.discard(name)
-    save_players()
-
-    await ctx.send(embed=embed_hunted(name, "remove", ctx.author.id))
-
-
-@bot.command()
-async def list(ctx):
-    if not tracked_players:
-        await ctx.send("📭 Nenhum player.")
-    else:
-        await ctx.send("🎯 HUNTED:\n" + "\n".join(tracked_players))
+    check_online.start()
 
 # ========================
-# ▶️ START
+# START
 # ========================
 
 bot.run(TOKEN)
