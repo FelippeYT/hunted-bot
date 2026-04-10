@@ -1,1 +1,1 @@
-worker: python main.py
+web: playwright install && python main.py
