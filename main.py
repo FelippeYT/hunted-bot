@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands, tasks
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 import json
 import os
 
@@ -31,30 +31,29 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# PLAYWRIGHT
+# PLAYWRIGHT ASYNC
 # ========================
 
-def get_online_players():
+async def get_online_players():
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page()
 
-            page.goto("https://rubinot.com.br/worlds/Tenebrium", timeout=60000)
+            await page.goto("https://rubinot.com.br/worlds/Tenebrium", timeout=60000)
 
-            # espera a tabela carregar
-            page.wait_for_selector("table tbody tr", timeout=30000)
+            await page.wait_for_selector("table tbody tr", timeout=30000)
 
-            players = page.query_selector_all("table tbody tr")
+            rows = await page.query_selector_all("table tbody tr")
 
             names = []
 
-            for row in players:
-                name = row.query_selector("td a")
-                if name:
-                    names.append(name.inner_text())
+            for row in rows:
+                el = await row.query_selector("td a")
+                if el:
+                    names.append(await el.inner_text())
 
-            browser.close()
+            await browser.close()
             return names
 
     except Exception as e:
@@ -71,7 +70,7 @@ async def on_ready():
 
     print(f"🔥 Bot online: {bot.user}")
 
-    last_online = set(get_online_players())
+    last_online = set(await get_online_players())
     check_online.start()
 
 # ========================
@@ -82,7 +81,7 @@ async def on_ready():
 async def check_online():
     global last_online
 
-    current = set(get_online_players())
+    current = set(await get_online_players())
     channel = bot.get_channel(CHANNEL_ID)
 
     if not channel:
