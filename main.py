@@ -2,21 +2,21 @@ import discord
 from discord.ext import commands, tasks
 import requests
 import json
-import asyncio
-import re
 import os
 
 TOKEN = os.getenv("TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix=".", intents=intents)
+
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 FILE = "players.json"
+
 tracked_players = set()
 online_players = set()
 
-# ------------------ LOAD/SAVE ------------------
+# ------------------ LOAD / SAVE ------------------
 
 def load_players():
     global tracked_players
@@ -33,15 +33,15 @@ def save_players():
 # ------------------ SCRAPER ------------------
 
 def get_player_status(name):
-    url = f"https://rubinot.com.br/characters?name={name.replace(' ', '%20')}"
-    
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "text/x-component",
-        "Referer": "https://rubinot.com.br/"
-    }
-
     try:
+        url = f"https://rubinot.com.br/characters?name={name.replace(' ', '%20')}"
+
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "text/x-component",
+            "Referer": "https://rubinot.com.br/"
+        }
+
         res = requests.get(url, headers=headers, timeout=10)
 
         if res.status_code != 200:
@@ -49,16 +49,14 @@ def get_player_status(name):
 
         text = res.text.lower()
 
-        # 💡 DETECÇÃO SIMPLES (ajustável)
         if "online" in text:
             return True
-        elif "offline" in text:
+        if "offline" in text:
             return False
 
         return None
 
-    except Exception as e:
-        print("Erro scraping:", e)
+    except:
         return None
 
 # ------------------ EVENTS ------------------
@@ -73,54 +71,51 @@ async def on_ready():
 
 @bot.command()
 async def track(ctx, *, name):
+    name = str(name).strip()
     tracked_players.add(name)
     save_players()
-    await ctx.send(f"✅ {name} foi adicionado ao tracking")
+    await ctx.send(f"✅ {name} adicionado ao tracking")
 
 @bot.command()
 async def untrack(ctx, *, name):
+    name = str(name).strip()
     tracked_players.discard(name)
     save_players()
     await ctx.send(f"❌ {name} removido")
 
-@bot.command()
-async def list(ctx):
+@bot.command(name="list")
+async def list_cmd(ctx):
     if not tracked_players:
         await ctx.send("📭 Nenhum player sendo trackado")
     else:
-        msg = "\n".join(tracked_players)
-        await ctx.send(f"📜 Players:\n{msg}")
+        await ctx.send("📜 Players:\n" + "\n".join(tracked_players))
 
 # ------------------ LOOP ------------------
 
-@tasks.loop(seconds=60)  # pode mudar pra 30 ou 120
+@tasks.loop(seconds=60)
 async def check_players():
-    global online_players
-
-    for player in tracked_players:
+    for player in list(tracked_players):
         status = get_player_status(player)
 
         if status is None:
             continue
 
-        # ficou online
         if status and player not in online_players:
             online_players.add(player)
             await notify(f"🟢 {player} entrou no jogo!")
 
-        # ficou offline
         elif not status and player in online_players:
             online_players.remove(player)
             await notify(f"🔴 {player} saiu do jogo!")
 
 # ------------------ NOTIFY ------------------
 
-async def notify(message):
+async def notify(msg):
     for guild in bot.guilds:
         for channel in guild.text_channels:
             if channel.permissions_for(guild.me).send_messages:
                 try:
-                    await channel.send(message)
+                    await channel.send(msg)
                     return
                 except:
                     continue
