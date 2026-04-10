@@ -4,17 +4,10 @@ import requests
 import json
 import os
 
-# ========================
-# ⚙️ CONFIG
-# ========================
-
 TOKEN = os.getenv("TOKEN")
-CF_CLEARANCE = os.getenv("CF_CLEARANCE")  # 👈 COOKIE AQUI
 CHANNEL_ID = 1492203477689176144
 
 intents = discord.Intents.default()
-intents.message_content = True
-
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ========================
@@ -36,30 +29,22 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 SESSION
+# 🌐 API
 # ========================
 
 session = requests.Session()
 
-# ========================
-# 🌐 API RUBINOT (COM COOKIE)
-# ========================
+headers = {
+    "User-Agent": "Mozilla/5.0",
+    "Accept": "application/json",
+    "Referer": "https://rubinot.com.br/worlds/Tenebrium"
+}
 
 def get_online_players():
     try:
         url = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
 
-        headers = {
-            "User-Agent": "Mozilla/5.0",
-            "Accept": "*/*",
-            "Referer": "https://rubinot.com.br/worlds/Tenebrium",
-        }
-
-        cookies = {
-            "cf_clearance": CF_CLEARANCE
-        }
-
-        res = session.get(url, headers=headers, cookies=cookies, timeout=10)
+        res = session.get(url, headers=headers, timeout=10)
 
         print("Status:", res.status_code)
 
@@ -67,7 +52,6 @@ def get_online_players():
             return []
 
         data = res.json()
-
         return [p["name"] for p in data.get("players", [])]
 
     except Exception as e:
@@ -84,16 +68,13 @@ def embed_hunted(player, action, user_id):
         color=0x00ff00 if action == "add" else 0xff0000
     ).add_field(
         name="👤 Usuário",
-        value=f"<@{user_id}>",
-        inline=True
+        value=f"<@{user_id}>"
     ).add_field(
         name="🎯 Player",
-        value=player,
-        inline=True
+        value=player
     ).add_field(
         name="📌 Status",
-        value="Adicionado à hunted" if action == "add" else "Removido da hunted",
-        inline=False
+        value="Adicionado" if action == "add" else "Removido"
     )
 
 # ========================
@@ -106,8 +87,6 @@ async def on_ready():
 
     print(f"🔥 Bot online: {bot.user}")
 
-    await bot.change_presence(activity=discord.Game(name="caçando players 👀"))
-
     last_online = set(get_online_players())
     check_online.start()
 
@@ -115,7 +94,7 @@ async def on_ready():
 # 🔁 LOOP
 # ========================
 
-@tasks.loop(seconds=60)
+@tasks.loop(seconds=30)
 async def check_online():
     global last_online
 
@@ -127,12 +106,11 @@ async def check_online():
         return
 
     for player in tracked_players:
-
         if player in current and player not in last_online:
-            await channel.send(f"🟢 **{player}** LOGOU")
+            await channel.send(f"🟢 {player} LOGOU")
 
         if player not in current and player in last_online:
-            await channel.send(f"🔴 **{player}** DESLOGOU")
+            await channel.send(f"🔴 {player} DESLOGOU")
 
     last_online = current
 
@@ -141,25 +119,25 @@ async def check_online():
 # ========================
 
 @bot.command()
-async def track(ctx, *, name):
-    tracked_players.add(name)
+async def track(ctx, *, name: str):
+    tracked_players.add(name)  # GARANTE STRING
     save_players()
 
-    embed = embed_hunted(name, "add", ctx.author.id)
-    await ctx.send(embed=embed)
+    await ctx.send(embed=embed_hunted(name, "add", ctx.author.id))
+
 
 @bot.command()
-async def untrack(ctx, *, name):
+async def untrack(ctx, *, name: str):
     tracked_players.discard(name)
     save_players()
 
-    embed = embed_hunted(name, "remove", ctx.author.id)
-    await ctx.send(embed=embed)
+    await ctx.send(embed=embed_hunted(name, "remove", ctx.author.id))
+
 
 @bot.command()
 async def list(ctx):
     if not tracked_players:
-        await ctx.send("📭 Nenhum player na hunted.")
+        await ctx.send("📭 Nenhum player.")
     else:
         await ctx.send("🎯 HUNTED:\n" + "\n".join(tracked_players))
 
