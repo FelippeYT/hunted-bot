@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands, tasks
-import requests
+import cloudscraper
 import json
 import os
 from bs4 import BeautifulSoup
@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 # ========================
 
 TOKEN = os.getenv("TOKEN")
-CHANNEL_ID = 1492203477689176144  # coloca seu canal
+CHANNEL_ID = 1492203477689176144  # seu canal
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -36,24 +36,20 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 REQUEST
+# 🌐 SCRAPER (ANTI 403)
 # ========================
 
-session = requests.Session()
-
-headers = {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://rubinot.com.br/worlds/Tenebrium"
-}
+scraper = cloudscraper.create_scraper()
 
 def get_online_players():
     try:
         url = "https://rubinot.com.br/worlds/Tenebrium"
 
-        res = session.get(url, headers=headers, timeout=10)
+        res = scraper.get(url, timeout=15)
+
+        print("Status:", res.status_code)
 
         if res.status_code != 200:
-            print("Erro status:", res.status_code)
             return []
 
         soup = BeautifulSoup(res.text, "html.parser")
@@ -63,7 +59,7 @@ def get_online_players():
         for row in soup.select("table tbody tr"):
             cols = row.find_all("td")
 
-            if len(cols) > 0:
+            if cols:
                 name = cols[0].text.strip()
                 players.append(name)
 
@@ -107,9 +103,7 @@ async def on_ready():
 
     await bot.change_presence(activity=discord.Game(name="caçando players 👀"))
 
-    # evita flood inicial
     last_online = set(get_online_players())
-
     check_online.start()
 
 # ========================
