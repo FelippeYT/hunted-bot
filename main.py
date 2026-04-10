@@ -3,11 +3,15 @@ from discord.ext import commands, tasks
 import requests
 import json
 import os
+from bs4 import BeautifulSoup
+
+# ========================
+# ⚙️ CONFIG
+# ========================
 
 TOKEN = os.getenv("TOKEN")
-CHANNEL_ID = 1492203477689176144  # seu canal
+CHANNEL_ID = 1492203477689176144  # coloca seu canal
 
-# ✅ INTENTS CORRETOS (SEM ERRO)
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -32,34 +36,41 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# 🌐 API
+# 🌐 REQUEST
 # ========================
 
 session = requests.Session()
 
 headers = {
     "User-Agent": "Mozilla/5.0",
-    "Accept": "application/json, text/plain, */*",
-    "Referer": "https://rubinot.com.br/worlds/Tenebrium",
-    "Origin": "https://rubinot.com.br"
+    "Referer": "https://rubinot.com.br/worlds/Tenebrium"
 }
 
 def get_online_players():
     try:
-        url = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
+        url = "https://rubinot.com.br/worlds/Tenebrium"
 
-        response = session.get(url, headers=headers, timeout=10)
+        res = session.get(url, headers=headers, timeout=10)
 
-        if response.status_code != 200:
-            print("Erro API:", response.status_code)
+        if res.status_code != 200:
+            print("Erro status:", res.status_code)
             return []
 
-        data = response.json()
+        soup = BeautifulSoup(res.text, "html.parser")
 
-        return [p["name"] for p in data.get("players", [])]
+        players = []
+
+        for row in soup.select("table tbody tr"):
+            cols = row.find_all("td")
+
+            if len(cols) > 0:
+                name = cols[0].text.strip()
+                players.append(name)
+
+        return players
 
     except Exception as e:
-        print("Erro API:", e)
+        print("Erro scraping:", e)
         return []
 
 # ========================
@@ -68,7 +79,7 @@ def get_online_players():
 
 def embed_hunted(player, action, user_id):
     return discord.Embed(
-        title="🗡️ SISTEMA DE HUNTED",
+        title="🗡️ HUNTED SYSTEM",
         color=0x00ff00 if action == "add" else 0xff0000
     ).add_field(
         name="👤 Usuário",
@@ -96,7 +107,7 @@ async def on_ready():
 
     await bot.change_presence(activity=discord.Game(name="caçando players 👀"))
 
-    # evita flood ao iniciar
+    # evita flood inicial
     last_online = set(get_online_players())
 
     check_online.start()
@@ -105,7 +116,7 @@ async def on_ready():
 # 🔁 LOOP
 # ========================
 
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=60)
 async def check_online():
     global last_online
 
@@ -119,10 +130,10 @@ async def check_online():
     for player in tracked_players:
 
         if player in current and player not in last_online:
-            await channel.send(f"🟢 {player} LOGOU")
+            await channel.send(f"🟢 **{player}** LOGOU")
 
         if player not in current and player in last_online:
-            await channel.send(f"🔴 {player} DESLOGOU")
+            await channel.send(f"🔴 **{player}** DESLOGOU")
 
     last_online = current
 
