@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands, tasks
-import cloudscraper
+from playwright.sync_api import sync_playwright
 import json
 import os
 
@@ -31,28 +31,34 @@ tracked_players = load_players()
 last_online = set()
 
 # ========================
-# CLOUDFLARE BYPASS
+# PLAYWRIGHT
 # ========================
-
-scraper = cloudscraper.create_scraper()
 
 def get_online_players():
     try:
-        url = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
 
-        res = scraper.get(url, timeout=15)
+            page.goto("https://rubinot.com.br/worlds/Tenebrium", timeout=60000)
 
-        print("Status:", res.status_code)
+            # espera a tabela carregar
+            page.wait_for_selector("table tbody tr", timeout=30000)
 
-        if res.status_code != 200:
-            return []
+            players = page.query_selector_all("table tbody tr")
 
-        data = res.json()
+            names = []
 
-        return [p["name"] for p in data.get("players", [])]
+            for row in players:
+                name = row.query_selector("td a")
+                if name:
+                    names.append(name.inner_text())
+
+            browser.close()
+            return names
 
     except Exception as e:
-        print("Erro:", e)
+        print("Erro scraping:", e)
         return []
 
 # ========================
@@ -72,7 +78,7 @@ async def on_ready():
 # LOOP
 # ========================
 
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=60)
 async def check_online():
     global last_online
 
