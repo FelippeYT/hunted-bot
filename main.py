@@ -8,6 +8,7 @@ TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = 1492203477689176144
 
 intents = discord.Intents.default()
+intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ========================
