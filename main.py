@@ -3,32 +3,21 @@ from discord.ext import commands, tasks
 import requests
 import json
 import os
+import threading
+from flask import Flask
 
 TOKEN = os.getenv("TOKEN")
+
+# ---------------- DISCORD BOT ----------------
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-FILE = "players.json"
-
 tracked_players = set()
-
-def safe_add(name):
-    if not isinstance(name, str):
-        name = str(name)
-
-    name = name.strip()
-
-    if name.startswith("<coroutine") or "coroutine" in name:
-        return False
-
-    tracked_players.add(name)
-    return True
 online_players = set()
-
-# ------------------ LOAD / SAVE ------------------
+FILE = "players.json"
 
 def load_players():
     global tracked_players
@@ -42,23 +31,15 @@ def save_players():
     with open(FILE, "w") as f:
         json.dump(list(tracked_players), f)
 
-# ------------------ SCRAPER ------------------
-
 def get_player_status(name):
     try:
         url = f"https://rubinot.com.br/characters?name={name.replace(' ', '%20')}"
-
         headers = {
             "User-Agent": "Mozilla/5.0",
-            "Accept": "text/x-component",
-            "Referer": "https://rubinot.com.br/"
+            "Accept": "text/html",
         }
 
         res = requests.get(url, headers=headers, timeout=10)
-
-        if res.status_code != 200:
-            return None
-
         text = res.text.lower()
 
         if "online" in text:
@@ -67,46 +48,8 @@ def get_player_status(name):
             return False
 
         return None
-
     except:
         return None
-
-# ------------------ EVENTS ------------------
-
-@bot.event
-async def on_ready():
-    print(f"🔥 Bot online: {bot.user}")
-    load_players()
-    check_players.start()
-
-# ------------------ COMMANDS ------------------
-
-@bot.command()
-async def track(ctx, *, name):
-    ok = safe_add(name)
-
-    if not ok:
-        await ctx.send("❌ Nome inválido")
-        return
-
-    save_players()
-    await ctx.send(f"✅ {name} adicionado")
-
-@bot.command()
-async def untrack(ctx, *, name):
-    name = str(name).strip()
-    tracked_players.discard(name)
-    save_players()
-    await ctx.send(f"❌ {name} removido")
-
-@bot.command(name="list")
-async def list_cmd(ctx):
-    if not tracked_players:
-        await ctx.send("📭 Nenhum player sendo trackado")
-    else:
-        await ctx.send("📜 Players:\n" + "\n".join(tracked_players))
-
-# ------------------ LOOP ------------------
 
 @tasks.loop(seconds=60)
 async def check_players():
@@ -124,8 +67,6 @@ async def check_players():
             online_players.remove(player)
             await notify(f"🔴 {player} saiu do jogo!")
 
-# ------------------ NOTIFY ------------------
-
 async def notify(msg):
     for guild in bot.guilds:
         for channel in guild.text_channels:
@@ -134,8 +75,42 @@ async def notify(msg):
                     await channel.send(msg)
                     return
                 except:
-                    continue
+                    pass
 
-# ------------------ RUN ------------------
+@bot.event
+async def on_ready():
+    print(f"🔥 Bot online: {bot.user}")
+    load_players()
+    check_players.start()
 
-bot.run(TOKEN)
+@bot.command()
+async def track(ctx, *, name):
+    tracked_players.add(name)
+    save_players()
+    await ctx.send(f"✅ {name} adicionado")
+
+@bot.command(name="list")
+async def list_cmd(ctx):
+    await ctx.send("\n".join(tracked_players) if tracked_players else "vazio")
+
+
+def run_bot():
+    bot.run(TOKEN)
+
+
+# ---------------- FLASK DASHBOARD ----------------
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Bot online OK"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=5000)
+
+
+# ---------------- START BOTH ----------------
+
+threading.Thread(target=run_flask).start()
+threading.Thread(target=run_bot).start()
