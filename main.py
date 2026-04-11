@@ -23,7 +23,7 @@ async def on_ready():
     print(f"Bot online: {bot.user}")
 
 def run_bot():
-    bot.run("SEU_TOKEN_AQUI")  # ou os.getenv("TOKEN")
+    bot.run("MTQ5MjAzMzMxODY1OTgyMTYxOQ.GCWike.9D6O8qGlZ5l86NBVdFS3O0Fko5JmCkBTTDF254")  # ou os.getenv("TOKEN")
 
 
 # 🔥 ISSO AQUI É O QUE FALTA
