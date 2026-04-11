@@ -1,88 +1,167 @@
-import threading
 import os
-import json
-from flask import Flask, jsonify, render_template_string
+import time
+import asyncio
+import requests
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
-# ---------------- FILE ----------------
-FILE = "players.json"
+# =========================
+# CONFIG
+# =========================
 
-def load_players():
-    try:
-        with open(FILE, "r") as f:
-            return json.load(f)
-    except:
-        return []
+TOKEN = os.getenv("TOKEN")
 
-# ---------------- FLASK ----------------
-app = Flask(__name__)
+WORLD_API = "https://rubinot.com.br/api/worlds/Tenebrium?order=name_asc"
 
-HTML = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tracker Dashboard</title>
-    <meta http-equiv="refresh" content="10">
-    <style>
-        body { background:#0f0f0f; color:white; font-family:Arial; }
-        .box { padding:20px; }
-        .player { padding:6px; border-bottom:1px solid #333; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1>🔥 Tracker Dashboard</h1>
-        <h3>Players monitorados:</h3>
-        {% for p in players %}
-            <div class="player">{{p}}</div>
-        {% endfor %}
-    </div>
-</body>
-</html>
-"""
-
-@app.route("/")
-def home():
-    players = load_players()
-    return render_template_string(HTML, players=players)
-
-@app.route("/api")
-def api():
-    return jsonify(load_players())
-
-def run_flask():
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
-# ---------------- DISCORD BOT ----------------
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 tracked_players = set()
+online_players = set()
+
+session = requests.Session()
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
+    "Referer": "https://rubinot.com.br/worlds/Tenebrium",
+    "Origin": "https://rubinot.com.br",
+    "Connection": "keep-alive"
+}
+
+# =========================
+# CLOUDFARE SESSION INIT
+# =========================
+
+def init_session():
+    try:
+        session.get("https://rubinot.com.br/worlds/Tenebrium", headers=HEADERS, timeout=10)
+        print("🟢 Session inicializada")
+    except Exception as e:
+        print("Erro init session:", e)
+
+# =========================
+# API FETCH
+# =========================
+
+def get_world_data():
+    try:
+        res = session.get(WORLD_API, headers=HEADERS, timeout=10)
+
+        if res.status_code != 200:
+            print("Bloqueado API:", res.status_code)
+            return None
+
+        return res.json()
+
+    except Exception as e:
+        print("Erro API:", e)
+        return None
+
+# =========================
+# PLAYER STATUS
+# =========================
+
+def get_player_status(name: str):
+    data = get_world_data()
+    if not data:
+        return None
+
+    # estrutura comum: data["characters"]
+    characters = data.get("characters", [])
+
+    for char in characters:
+        char_name = char.get("name", "").lower()
+        if char_name == name.lower():
+            return char.get("online", False)
+
+    return None
+
+# =========================
+# DISCORD EVENTS
+# =========================
 
 @bot.event
 async def on_ready():
     print(f"🔥 Bot online: {bot.user}")
 
+    init_session()
+    check_players.start()
+
+# =========================
+# COMMANDS
+# =========================
+
 @bot.command()
 async def track(ctx, *, name):
+    name = name.strip()
     tracked_players.add(name)
+    await ctx.send(f"✅ {name} adicionado ao tracking")
 
-    with open(FILE, "w") as f:
-        json.dump(list(tracked_players), f)
-
-    await ctx.send(f"✅ {name} adicionado")
+@bot.command()
+async def untrack(ctx, *, name):
+    name = name.strip()
+    tracked_players.discard(name)
+    await ctx.send(f"❌ {name} removido do tracking")
 
 @bot.command(name="list")
 async def list_cmd(ctx):
-    await ctx.send("\n".join(tracked_players) if tracked_players else "vazio")
+    if not tracked_players:
+        await ctx.send("📭 Nenhum player sendo trackado")
+        return
 
-def run_bot():
-    bot.run(os.getenv("TOKEN"))
+    await ctx.send("📜 Players:\n" + "\n".join(tracked_players))
 
-# ---------------- START ----------------
-if __name__ == "__main__":
-    threading.Thread(target=run_flask).start()
-    run_bot()
+@bot.command()
+async def online(ctx):
+    if not online_players:
+        await ctx.send("🔴 Ninguém online agora")
+        return
+
+    await ctx.send("🟢 Online:\n" + "\n".join(online_players))
+
+# =========================
+# LOOP CHECK
+# =========================
+
+@tasks.loop(seconds=60)
+async def check_players():
+    for player in list(tracked_players):
+
+        status = get_player_status(player)
+
+        if status is None:
+            continue
+
+        # entrou
+        if status and player not in online_players:
+            online_players.add(player)
+            await notify(f"🟢 {player} entrou no jogo!")
+
+        # saiu
+        elif not status and player in online_players:
+            online_players.remove(player)
+            await notify(f"🔴 {player} saiu do jogo!")
+
+# =========================
+# NOTIFY
+# =========================
+
+async def notify(message):
+    for guild in bot.guilds:
+        for channel in guild.text_channels:
+            if channel.permissions_for(guild.me).send_messages:
+                try:
+                    await channel.send(message)
+                    return
+                except:
+                    continue
+
+# =========================
+# RUN BOT
+# =========================
+
+bot.run(TOKEN)
