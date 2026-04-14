@@ -1,134 +1,147 @@
 import discord
 from discord.ext import commands, tasks
-from playwright.async_api import async_playwright
-import asyncio
 import json
 import os
+import cloudscraper
+from bs4 import BeautifulSoup
+import asyncio
 
-TOKEN = os.getenv("TOKEN")
+# --- CONFIGURAÇÕES ---
+TOKEN = os.getenv("DISCORD_TOKEN")
+# ID do canal onde o bot enviará os alertas de hunted
+CHANNEL_ID = int(os.getenv("CHANNEL_ID", 0)) 
+FILE = "players.json"
 
+# --- SETUP DO BOT ---
 intents = discord.Intents.default()
 intents.message_content = True
-
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-FILE = "players.json"
+# Criamos o scraper globalmente para manter cookies/sessão
+scraper = cloudscraper.create_scraper()
+
 tracked_players = set()
-online_players = set()
+online_players_cache = set()
 
-
-# ---------------- LOAD / SAVE ----------------
-
-def load_players():
+# --- PERSISTÊNCIA DE DADOS ---
+def load_data():
     global tracked_players
+    if os.path.exists(FILE):
+        try:
+            with open(FILE, "r", encoding="utf-8") as f:
+                tracked_players = set(json.load(f))
+            print(f"📦 {len(tracked_players)} players carregados da lista.")
+        except Exception as e:
+            print(f"⚠️ Erro ao carregar arquivo: {e}")
+
+def save_data():
     try:
-        with open(FILE, "r") as f:
-            tracked_players = set(json.load(f))
-    except:
-        tracked_players = set()
+        with open(FILE, "w", encoding="utf-8") as f:
+            json.dump(list(tracked_players), f, indent=4)
+    except Exception as e:
+        print(f"⚠️ Erro ao salvar arquivo: {e}")
 
-def save_players():
-    with open(FILE, "w") as f:
-        json.dump(list(tracked_players), f)
-
-
-# ---------------- SCRAPER ----------------
-
-async def fetch_html():
+# --- LÓGICA DO SCRAPER (RUBINOT) ---
+def get_online_list():
     url = "https://rubinot.com.br/worlds/Tenebrium"
+    try:
+        # Simula um navegador real para evitar bloqueios
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        response = scraper.get(url, headers=headers, timeout=15)
+        
+        if response.status_code != 200:
+            print(f"❌ Erro no site: Status {response.status_code}")
+            return []
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-
-        context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120"
-        )
-
-        page = await context.new_page()
-        await page.goto(url, wait_until="networkidle")
-
-        html = await page.content()
-
-        await browser.close()
-
-        return html
-
-
-def parse_players(html):
-    players = []
-
-    for line in html.split("\n"):
-        if "/characters?name=" in line:
-            try:
-                start = line.find("name=") + 5
-                end = line.find('"', start)
-                name = line[start:end].replace("%20", " ")
-
+        soup = BeautifulSoup(response.text, "html.parser")
+        players = []
+        
+        # Busca links que levam para a página de personagens (padrão de OTServers)
+        for link in soup.find_all("a", href=True):
+            if "characters?name=" in link["href"]:
+                name = link.get_text().strip()
                 if name:
                     players.append(name)
-            except:
-                pass
+        
+        return list(set(players))
+    except Exception as e:
+        print(f"❌ Falha no scraping: {e}")
+        return []
 
-    return list(set(players))
-
-
-# ---------------- DISCORD ----------------
-
+# --- COMANDOS DISCORD ---
 @bot.event
 async def on_ready():
-    print(f"🔥 Bot online: {bot.user}")
-    load_players()
-    check_players.start()
+    print(f"🔥 Bot Hunted {bot.user} está ONLINE!")
+    load_data()
+    if not check_loop.is_running():
+        check_loop.start()
 
-
-@bot.command()
-async def track(ctx, *, name):
+@bot.command(name="track")
+async def track(ctx, *, name: str):
+    """Adiciona um player à lista de monitoramento"""
     tracked_players.add(name)
-    save_players()
-    await ctx.send(f"✅ {name} adicionado")
+    save_data()
+    await ctx.send(f"🎯 **{name}** agora é um alvo monitorado!")
 
-@bot.command()
-async def untrack(ctx, *, name):
+@bot.command(name="untrack")
+async def untrack(ctx, *, name: str):
+    """Remove um player da lista"""
     tracked_players.discard(name)
-    save_players()
-    await ctx.send(f"❌ {name} removido")
+    save_data()
+    await ctx.send(f"🕊️ **{name}** foi removido da lista.")
 
-@bot.command(name="list")
-async def list_cmd(ctx):
+@bot.command(name="hunted")
+async def list_hunted(ctx):
+    """Lista todos os players que estão sendo monitorados"""
     if not tracked_players:
-        await ctx.send("📭 Nenhum player")
+        return await ctx.send("📭 A lista de hunted está vazia.")
+    
+    lista = "\n".join([f"- {p}" for p in tracked_players])
+    await ctx.send(f"💀 **Lista de Hunted:**\n{lista}")
+
+# --- LOOP DE MONITORAMENTO ---
+@tasks.loop(seconds=40)
+async def check_loop():
+    global online_players_cache
+    
+    channel = bot.get_channel(CHANNEL_ID)
+    if not channel:
+        return
+
+    current_online = get_online_list()
+    if not current_online and not online_players_cache:
+        return
+
+    current_online_set = set(current_online)
+
+    # Verifica quem LOGOU
+    for p in current_online_set:
+        if p in tracked_players and p not in online_players_cache:
+            online_players_cache.add(p)
+            embed = discord.Embed(
+                title="🟢 TARGET ONLINE",
+                description=f"O player **{p}** acabou de entrar no jogo!",
+                color=0x2ecc71
+            )
+            await channel.send(embed=embed)
+
+    # Verifica quem LOGOU OUT
+    for p in list(online_players_cache):
+        if p not in current_online_set:
+            online_players_cache.remove(p)
+            if p in tracked_players:
+                embed = discord.Embed(
+                    title="🔴 TARGET OFFLINE",
+                    description=f"O player **{p}** saiu do jogo.",
+                    color=0xe74c3c
+                )
+                await channel.send(embed=embed)
+
+# Iniciar o bot
+if __name__ == "__main__":
+    if TOKEN:
+        bot.run(TOKEN)
     else:
-        await ctx.send("\n".join(tracked_players))
-
-
-# ---------------- LOOP ----------------
-
-@tasks.loop(seconds=60)
-async def check_players():
-    global online_players
-
-    html = await fetch_html()
-    players = parse_players(html)
-
-    for p in players:
-        if p in tracked_players and p not in online_players:
-            online_players.add(p)
-            await notify(f"🟢 {p} entrou no jogo!")
-
-    for p in list(online_players):
-        if p not in players:
-            online_players.remove(p)
-            await notify(f"🔴 {p} saiu do jogo!")
-
-
-# ---------------- NOTIFY ----------------
-
-async def notify(msg):
-    for guild in bot.guilds:
-        for channel in guild.text_channels:
-            if channel.permissions_for(guild.me).send_messages:
-                await channel.send(msg)
-                return
-
-
-bot.run(TOKEN)
+        print("❌ ERRO: DISCORD_TOKEN não encontrado nas variáveis de ambiente.")
