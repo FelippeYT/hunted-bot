@@ -4,7 +4,12 @@ import json
 import os
 import asyncio
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
+
+# Tenta importar stealth_async, se não achar, usa stealth
+try:
+    from playwright_stealth import stealth_async
+except ImportError:
+    from playwright_stealth import stealth as stealth_async
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = int(os.getenv("CHANNEL_ID", 0))
