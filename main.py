@@ -21,19 +21,25 @@ online_players_cache = set()
 
 def get_online_list():
     target_url = "https://rubinot.com.br/worlds/Tenebrium"
-    # Usando parâmetros em um dicionário para evitar erros de caracteres na URL
     api_url = "https://api.scraperant.com/v2/general"
+    
+    # Adicionamos Headers para ajudar na conexão
+    headers = {
+        "Host": "api.scraperant.com",
+        "User-Agent": "Mozilla/5.0"
+    }
+    
     params = {
         'url': target_url,
         'x-api-key': ANT_KEY,
         'browser': 'true'
     }
     
-    # Tenta até 3 vezes antes de desistir
     for i in range(3):
         try:
-            print(f"📡 [ANT] Tentativa {i+1}/3 - Solicitando Proxy...")
-            response = requests.get(api_url, params=params, timeout=45)
+            print(f"📡 [ANT] Tentativa {i+1}/3...")
+            # Aumentamos o timeout para 60 segundos
+            response = requests.get(api_url, params=params, headers=headers, timeout=60)
             
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'html.parser')
@@ -43,17 +49,15 @@ def get_online_list():
                         name = link.text.strip()
                         if name and name not in names:
                             names.append(name)
-                
-                print(f"✅ [ANT] Sucesso! {len(names)} players encontrados.")
+                print(f"✅ [ANT] Sucesso! {len(names)} players.")
                 return names
             else:
-                print(f"⚠️ [ANT] Erro {response.status_code}")
-                break # Se deu erro 403 ou similar, não adianta tentar de novo na hora
+                print(f"⚠️ [ANT] Erro HTTP {response.status_code}")
+                break
         except Exception as e:
-            print(f"❌ [ANT] Falha na conexão (DNS/Rede): {e}")
-            # Espera 5 segundos antes de tentar de novo se for erro de rede
+            print(f"❌ [ANT] Erro de Rede: {e}")
             import time
-            time.sleep(5)
+            time.sleep(10) # Espera 10s entre tentativas
             
     return []
 
