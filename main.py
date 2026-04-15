@@ -21,32 +21,41 @@ online_players_cache = set()
 
 def get_online_list():
     target_url = "https://rubinot.com.br/worlds/Tenebrium"
-    # Configuração para o ScraperAnt resolver o JS e a Cloudflare
-    api_url = f"https://api.scraperant.com/v2/general?url={target_url}&x-api-key={ANT_KEY}&browser=true"
+    # Usando parâmetros em um dicionário para evitar erros de caracteres na URL
+    api_url = "https://api.scraperant.com/v2/general"
+    params = {
+        'url': target_url,
+        'x-api-key': ANT_KEY,
+        'browser': 'true'
+    }
     
-    try:
-        print("📡 [ANT] Solicitando página via Proxy...")
-        response = requests.get(api_url, timeout=60)
-        
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text, 'html.parser')
-            names = []
-
-            # Varre o HTML processado em busca dos links de personagens
-            for link in soup.find_all('a', href=True):
-                if '/character/' in link['href']:
-                    name = link.text.strip()
-                    if name and name not in names:
-                        names.append(name)
+    # Tenta até 3 vezes antes de desistir
+    for i in range(3):
+        try:
+            print(f"📡 [ANT] Tentativa {i+1}/3 - Solicitando Proxy...")
+            response = requests.get(api_url, params=params, timeout=45)
             
-            print(f"✅ [ANT] Sucesso! {len(names)} players encontrados.")
-            return names
-        else:
-            print(f"❌ [ANT] Erro {response.status_code}: {response.text[:100]}")
-            return []
-    except Exception as e:
-        print(f"❌ [ANT] Falha na conexão: {e}")
-        return []
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                names = []
+                for link in soup.find_all('a', href=True):
+                    if '/character/' in link['href']:
+                        name = link.text.strip()
+                        if name and name not in names:
+                            names.append(name)
+                
+                print(f"✅ [ANT] Sucesso! {len(names)} players encontrados.")
+                return names
+            else:
+                print(f"⚠️ [ANT] Erro {response.status_code}")
+                break # Se deu erro 403 ou similar, não adianta tentar de novo na hora
+        except Exception as e:
+            print(f"❌ [ANT] Falha na conexão (DNS/Rede): {e}")
+            # Espera 5 segundos antes de tentar de novo se for erro de rede
+            import time
+            time.sleep(5)
+            
+    return []
 
 @tasks.loop(seconds=60)
 async def check_loop():
