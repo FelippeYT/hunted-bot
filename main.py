@@ -1,11 +1,15 @@
+import os
 import discord
 from discord.ext import commands, tasks
 import json
-import os
 import asyncio
 from playwright.async_api import async_playwright
 
-# Configuração de Import Stealth
+# Define o caminho para a pasta local que criamos no nixpacks
+# O ponto '.' refere-se ao diretório atual do projeto no Railway (/app)
+os.environ['PLAYWRIGHT_BROWSERS_PATH'] = os.path.join(os.getcwd(), 'browser-data')
+
+# Tenta importar o modo stealth
 try:
     from playwright_stealth import stealth_async
 except ImportError:
