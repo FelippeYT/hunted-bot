@@ -1,0 +1,209 @@
+[
+    {
+        "datetime": "26/04/2026 20:42:33",
+        "name": "Abs Soulwalker",
+        "level": 368,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:41:43",
+        "name": "Ureki Mazino",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:40:53",
+        "name": "Abs Soulwalker",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:40:04",
+        "name": "Peupeu Ek",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:33:24",
+        "name": "Peupeu Ek",
+        "level": 836,
+        "event": "down",
+        "details": "📉 DOWN (antes 839)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:33:24",
+        "name": "Peupeu Ek",
+        "level": 836,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:32:34",
+        "name": "Keidann Lokoo",
+        "level": 737,
+        "event": "up",
+        "details": "📈 UP (antes 736)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:30:05",
+        "name": "Ureki Mazino",
+        "level": 354,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:24:14",
+        "name": "Vampiro Veganno",
+        "level": 738,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:22:33",
+        "name": "Bonecaodeposto",
+        "level": 694,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:34",
+        "name": "Royall bolaadao",
+        "level": 663,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:34",
+        "name": "Oprimido Zola",
+        "level": 624,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:34",
+        "name": "Neelixnerd",
+        "level": 820,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:13:33",
+        "name": "Lewismtcalmo",
+        "level": 582,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:33",
+        "name": "Keidann Lokoo",
+        "level": 736,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:13:33",
+        "name": "Kascola in balt",
+        "level": 624,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:13:32",
+        "name": "Gelado The Cold",
+        "level": 503,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:32",
+        "name": "Cara de Cadela",
+        "level": 592,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:32",
+        "name": "Bominovo",
+        "level": 784,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:13:31",
+        "name": "Alfuz",
+        "level": 499,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:31",
+        "name": "Alfuz",
+        "level": 500,
+        "event": "pve",
+        "details": "Morto por Silencer",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "26/04/2026 20:13:30",
+        "name": "Abs Soulwalker",
+        "level": 368,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "26/04/2026 20:13:30",
+        "name": "Abs Soulwalker",
+        "level": 369,
+        "event": "pve",
+        "details": "Morto por Drillworm",
+        "status": "off",
+        "player_type": "hunted"
+    }
+]
