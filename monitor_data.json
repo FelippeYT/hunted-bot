@@ -1,78 +1,42 @@
 [
     {
-        "datetime": "26/04/2026 20:42:33",
-        "name": "Abs Soulwalker",
-        "level": 368,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:41:43",
-        "name": "Ureki Mazino",
-        "level": "---",
-        "event": "status",
-        "details": "Saiu do jogo",
-        "status": "off",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:40:53",
-        "name": "Abs Soulwalker",
-        "level": "---",
-        "event": "status",
-        "details": "Saiu do jogo",
-        "status": "off",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:40:04",
-        "name": "Peupeu Ek",
-        "level": "---",
-        "event": "status",
-        "details": "Saiu do jogo",
-        "status": "off",
-        "player_type": "friend"
-    },
-    {
-        "datetime": "26/04/2026 20:33:24",
-        "name": "Peupeu Ek",
-        "level": 836,
+        "datetime": "27/04/2026 16:11:21",
+        "name": "Keu Show Paramax",
+        "level": 430,
         "event": "down",
-        "details": "📉 DOWN (antes 839)",
+        "details": "📉 DOWN (antes 432)",
         "status": "on",
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:33:24",
-        "name": "Peupeu Ek",
-        "level": 836,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
+        "datetime": "27/04/2026 16:09:16",
+        "name": "Keu Show Paramax",
+        "level": 432,
+        "event": "pve",
+        "details": "Morto por Branchy crawler",
+        "status": "off",
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:32:34",
-        "name": "Keidann Lokoo",
-        "level": 737,
-        "event": "up",
-        "details": "📈 UP (antes 736)",
-        "status": "on",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:30:05",
-        "name": "Ureki Mazino",
-        "level": 354,
+        "datetime": "27/04/2026 16:03:11",
+        "name": "Petista atrapalhando",
+        "level": "---",
         "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "hunted"
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:24:14",
+        "datetime": "27/04/2026 16:03:11",
+        "name": "Darkxz Pa",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 16:03:10",
         "name": "Vampiro Veganno",
         "level": 738,
         "event": "status",
@@ -81,80 +45,80 @@
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:22:33",
-        "name": "Bonecaodeposto",
-        "level": 694,
-        "event": "status",
-        "details": "Entrou no jogo",
+        "datetime": "27/04/2026 15:50:34",
+        "name": "Cury Is Back",
+        "level": 346,
+        "event": "up",
+        "details": "📈 UP (antes 345)",
         "status": "on",
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:13:34",
-        "name": "Royall bolaadao",
-        "level": 663,
-        "event": "status",
-        "details": "Entrou no jogo",
+        "datetime": "27/04/2026 15:46:44",
+        "name": "Petista atrapalhando",
+        "level": 516,
+        "event": "up",
+        "details": "📈 UP (antes 515)",
         "status": "on",
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:13:34",
-        "name": "Oprimido Zola",
-        "level": 624,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "friend"
-    },
-    {
-        "datetime": "26/04/2026 20:13:34",
-        "name": "Neelixnerd",
-        "level": 820,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:13:33",
-        "name": "Lewismtcalmo",
-        "level": 582,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "friend"
-    },
-    {
-        "datetime": "26/04/2026 20:13:33",
-        "name": "Keidann Lokoo",
-        "level": 736,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:13:33",
-        "name": "Kascola in balt",
-        "level": 624,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "hunted"
-    },
-    {
-        "datetime": "26/04/2026 20:13:32",
+        "datetime": "27/04/2026 15:45:34",
         "name": "Gelado The Cold",
-        "level": 503,
-        "event": "status",
-        "details": "Entrou no jogo",
+        "level": 505,
+        "event": "down",
+        "details": "📉 DOWN (antes 506)",
         "status": "on",
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:13:32",
-        "name": "Cara de Cadela",
+        "datetime": "27/04/2026 15:43:59",
+        "name": "Gelado The Cold",
+        "level": 506,
+        "event": "pve",
+        "details": "Morto por Dreadful harvester",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:38:23",
+        "name": "Keu Show Paramax",
+        "level": 432,
+        "event": "up",
+        "details": "📈 UP (antes 431)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:33:23",
+        "name": "Bominovo",
+        "level": 790,
+        "event": "up",
+        "details": "📈 UP (antes 789)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 15:27:34",
+        "name": "Petista atrapalhando",
+        "level": 515,
+        "event": "up",
+        "details": "📈 UP (antes 514)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:26:43",
+        "name": "Besta Fera Invocado",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:20:04",
+        "name": "Lewismtcalmo",
         "level": 592,
         "event": "status",
         "details": "Entrou no jogo",
@@ -162,48 +126,777 @@
         "player_type": "friend"
     },
     {
-        "datetime": "26/04/2026 20:13:32",
+        "datetime": "27/04/2026 15:20:03",
+        "name": "Keidann Lokoo",
+        "level": 750,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 15:15:54",
+        "name": "Exodia Criminal",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 15:15:53",
+        "name": "Lewismtcalmo",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:08",
+        "name": "Petista atrapalhando",
+        "level": 514,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:08",
+        "name": "Tormentum Defender",
+        "level": 667,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:07",
+        "name": "Macho Beta",
+        "level": 668,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:07",
+        "name": "On Firee",
+        "level": 593,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:02",
+        "name": "Gelado The Cold",
+        "level": 506,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:02",
+        "name": "Keu Show Paramax",
+        "level": 431,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:02",
+        "name": "Lewismtcalmo",
+        "level": 592,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:01",
+        "name": "Darkxz Pa",
+        "level": 615,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:06:01",
+        "name": "Exodia Criminal",
+        "level": 723,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 15:06:00",
+        "name": "Cury Is Back",
+        "level": 345,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:05:57",
+        "name": "Besta Fera Invocado",
+        "level": 621,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:05:57",
         "name": "Bominovo",
-        "level": 784,
+        "level": 789,
         "event": "status",
         "details": "Entrou no jogo",
         "status": "on",
         "player_type": "hunted"
     },
     {
-        "datetime": "26/04/2026 20:13:31",
-        "name": "Alfuz",
-        "level": 499,
-        "event": "status",
-        "details": "Entrou no jogo",
-        "status": "on",
-        "player_type": "friend"
-    },
-    {
-        "datetime": "26/04/2026 20:13:31",
-        "name": "Alfuz",
-        "level": 500,
-        "event": "pve",
-        "details": "Morto por Silencer",
-        "status": "off",
-        "player_type": "friend"
-    },
-    {
-        "datetime": "26/04/2026 20:13:30",
+        "datetime": "27/04/2026 15:05:56",
         "name": "Abs Soulwalker",
-        "level": 368,
+        "level": 375,
         "event": "status",
         "details": "Entrou no jogo",
         "status": "on",
         "player_type": "hunted"
     },
     {
-        "datetime": "26/04/2026 20:13:30",
-        "name": "Abs Soulwalker",
-        "level": 369,
+        "datetime": "27/04/2026 15:03:20",
+        "name": "Petista atrapalhando",
+        "level": 514,
+        "event": "up",
+        "details": "📈 UP (antes 513)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 15:03:18",
+        "name": "On Firee",
+        "level": 593,
+        "event": "down",
+        "details": "📉 DOWN (antes 594)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:56:38",
+        "name": "Besta Fera Invocado",
+        "level": 621,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:56:38",
+        "name": "Besta Fera Invocado",
+        "level": 621,
+        "event": "up",
+        "details": "📈 UP (antes 598)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:55:44",
+        "name": "On Firee",
+        "level": 594,
         "event": "pve",
-        "details": "Morto por Drillworm",
+        "details": "Morto por Hardened usurper archer",
         "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:55:44",
+        "name": "On Firee",
+        "level": 594,
+        "event": "pve",
+        "details": "Morto por Hardened usurper archer",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:54:59",
+        "name": "Keu Show Paramax",
+        "level": 431,
+        "event": "up",
+        "details": "📈 UP (antes 430)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:54:59",
+        "name": "Tormentum Defender",
+        "level": 667,
+        "event": "up",
+        "details": "📈 UP (antes 666)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:54:58",
+        "name": "Darkxz Pa",
+        "level": 615,
+        "event": "up",
+        "details": "📈 UP (antes 614)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:54:58",
+        "name": "Gelado The Cold",
+        "level": 506,
+        "event": "down",
+        "details": "📉 DOWN (antes 512)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:46:28",
+        "name": "Gelado The Cold",
+        "level": 511,
+        "event": "pve",
+        "details": "Morto por Gorerilla",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:46:28",
+        "name": "Gelado The Cold",
+        "level": 511,
+        "event": "pve",
+        "details": "Morto por Gorerilla",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:44:15",
+        "name": "Gelado The Cold",
+        "level": 512,
+        "event": "pve",
+        "details": "Morto por Gorerilla",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:44:15",
+        "name": "Gelado The Cold",
+        "level": 512,
+        "event": "pve",
+        "details": "Morto por Gorerilla",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:44:08",
+        "name": "Gelado The Cold",
+        "level": 512,
+        "event": "up",
+        "details": "📈 UP (antes 511)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:42:28",
+        "name": "Darkxz Pa",
+        "level": 614,
+        "event": "down",
+        "details": "📉 DOWN (antes 616)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:39:26",
+        "name": "Darkxz Pa",
+        "level": 616,
+        "event": "pve",
+        "details": "Morto por Fungosaurus",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:39:26",
+        "name": "Darkxz Pa",
+        "level": 616,
+        "event": "pve",
+        "details": "Morto por Fungosaurus",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:35:48",
+        "name": "Exodia Criminal",
+        "level": 723,
+        "event": "up",
+        "details": "📈 UP (antes 722)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:31:38",
+        "name": "Darkxz Pa",
+        "level": 616,
+        "event": "up",
+        "details": "📈 UP (antes 615)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:24:08",
+        "name": "Warewar Ratao",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:23:18",
+        "name": "Warewar Ratao",
+        "level": 423,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:22:32",
+        "name": "Tormentum Defender",
+        "level": 666,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:27",
+        "name": "On Firee",
+        "level": 594,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:27",
+        "name": "Petista atrapalhando",
+        "level": 513,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:26",
+        "name": "Lewismtcalmo",
+        "level": 592,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:26",
+        "name": "Macho Beta",
+        "level": 668,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:25",
+        "name": "Exodia Criminal",
+        "level": 722,
+        "event": "up",
+        "details": "📈 UP (antes 721)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:22:25",
+        "name": "Gelado The Cold",
+        "level": 511,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:25",
+        "name": "Keu Show Paramax",
+        "level": 430,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:24",
+        "name": "Darkxz Pa",
+        "level": 615,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:24",
+        "name": "Exodia Criminal",
+        "level": 722,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:22:23",
+        "name": "Bominovo",
+        "level": 789,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:22:23",
+        "name": "Cury Is Back",
+        "level": 345,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:22:22",
+        "name": "Abs Soulwalker",
+        "level": 375,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:14:10",
+        "name": "Warewar Ratao",
+        "level": 423,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:13:20",
+        "name": "Keu Show Paramax",
+        "level": 430,
+        "event": "up",
+        "details": "📈 UP (antes 429)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:12:36",
+        "name": "Darkxz Pa",
+        "level": 615,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:09:11",
+        "name": "Vampiro Veganno",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:09:10",
+        "name": "Petista atrapalhando",
+        "level": 513,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:08:21",
+        "name": "Lewismtcalmo",
+        "level": 592,
+        "event": "up",
+        "details": "📈 UP (antes 590)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:08:20",
+        "name": "Lewismtcalmo",
+        "level": 592,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:07:30",
+        "name": "Exodia Criminal",
+        "level": 721,
+        "event": "up",
+        "details": "📈 UP (antes 720)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 14:05:51",
+        "name": "Vampiro Veganno",
+        "level": 738,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 14:04:10",
+        "name": "Keidann Lokoo",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:55:01",
+        "name": "Warewar Ratao",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:53:20",
+        "name": "Exodia Criminal",
+        "level": 720,
+        "event": "up",
+        "details": "📈 UP (antes 719)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:49:10",
+        "name": "Caibi sem Sio",
+        "level": "---",
+        "event": "status",
+        "details": "Saiu do jogo",
+        "status": "off",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:36",
+        "name": "Tormentum Defender",
+        "level": 666,
+        "event": "up",
+        "details": "📈 UP (antes 665)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:36",
+        "name": "Warewar Ratao",
+        "level": 423,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:36",
+        "name": "Warewar Ratao",
+        "level": 423,
+        "event": "up",
+        "details": "📈 UP (antes 417)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:35",
+        "name": "Tormentum Defender",
+        "level": 666,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:30",
+        "name": "On Firee",
+        "level": 594,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:30",
+        "name": "On Firee",
+        "level": 594,
+        "event": "up",
+        "details": "📈 UP (antes 588)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:29",
+        "name": "Macho Beta",
+        "level": 668,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:29",
+        "name": "Macho Beta",
+        "level": 668,
+        "event": "up",
+        "details": "📈 UP (antes 663)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:28",
+        "name": "Keu Show Paramax",
+        "level": 429,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:28",
+        "name": "Keu Show Paramax",
+        "level": 429,
+        "event": "down",
+        "details": "📉 DOWN (antes 430)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:27",
+        "name": "Gelado The Cold",
+        "level": 511,
+        "event": "up",
+        "details": "📈 UP (antes 507)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:27",
+        "name": "Keidann Lokoo",
+        "level": 750,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:27",
+        "name": "Keidann Lokoo",
+        "level": 750,
+        "event": "up",
+        "details": "📈 UP (antes 747)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:26",
+        "name": "Gelado The Cold",
+        "level": 511,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:25",
+        "name": "Cury Is Back",
+        "level": 345,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:25",
+        "name": "Cury Is Back",
+        "level": 345,
+        "event": "up",
+        "details": "📈 UP (antes 344)",
+        "status": "on",
+        "player_type": "friend"
+    },
+    {
+        "datetime": "27/04/2026 13:44:25",
+        "name": "Exodia Criminal",
+        "level": 719,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:22",
+        "name": "Caibi sem Sio",
+        "level": 623,
+        "event": "up",
+        "details": "📈 UP (antes 622)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:21",
+        "name": "Bominovo",
+        "level": 789,
+        "event": "down",
+        "details": "📉 DOWN (antes 791)",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:21",
+        "name": "Caibi sem Sio",
+        "level": 623,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:20",
+        "name": "Abs Soulwalker",
+        "level": 375,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
+        "player_type": "hunted"
+    },
+    {
+        "datetime": "27/04/2026 13:44:20",
+        "name": "Bominovo",
+        "level": 789,
+        "event": "status",
+        "details": "Entrou no jogo",
+        "status": "on",
         "player_type": "hunted"
     }
 ]

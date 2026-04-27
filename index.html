@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIKINI BOTTOM - RADAR SYSTEM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-body: #000; 
+            --bg-glass: rgba(200, 200, 200, 0.05); 
+            --accent-green: #00ff00; 
+            --accent-blue: #00e5ff; 
+            --hunted-red: #ff3333;
+        }
+        
+        body { 
+            background-color: var(--bg-body); 
+            color: #fff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            min-height: 100vh; 
+        }
+
+        body::before { 
+            content: ""; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: url('https://i.imgur.com/pQ7jZSI.png'); 
+            background-size: cover; 
+            opacity: 0.15; 
+            z-index: -1; 
+        }
+        
+        .navbar { 
+            background: rgba(0,0,0,0.9); 
+            border-bottom: 3px solid var(--accent-green); 
+            padding: 15px; 
+            box-shadow: 0 4px 20px rgba(0, 255, 0, 0.1);
+        }
+        
+        .player-card { 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            background: rgba(15, 15, 15, 0.85); 
+            border: 1px solid #333; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 15px;
+        }
+        
+        .player-card:hover { 
+            border-color: var(--accent-green); 
+            transform: translateY(-4px); 
+            box-shadow: 0 6px 20px rgba(0, 255, 0, 0.15); 
+        }
+        
+        .status-dot { 
+            width: 12px; 
+            height: 12px; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-right: 10px; 
+        }
+        
+        .online { background: var(--accent-green); box-shadow: 0 0 12px var(--accent-green); }
+        .offline { background: #555; }
+        
+        .nav-tabs { border-bottom: 1px solid #222; }
+        .nav-tabs .nav-link { 
+            color: #777; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            border: none; 
+            padding: 15px 25px; 
+            transition: 0.3s;
+        }
+        .nav-tabs .nav-link.active { 
+            background: none; 
+            color: var(--accent-green); 
+            border-bottom: 3px solid var(--accent-green); 
+        }
+
+        .feed-container { 
+            background: rgba(10, 10, 10, 0.8); 
+            border-radius: 12px; 
+            padding: 20px; 
+            border: 1px solid #222; 
+        }
+        
+        .log-entry { 
+            font-size: 0.95rem; 
+            padding: 8px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+
+        .modal-content { 
+            background: #0a0a0a; 
+            border: 1px solid var(--accent-green); 
+            color: #fff; 
+        }
+        .btn-close-white { filter: invert(1) grayscale(100%) brightness(200%); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar mb-4">
+    <div class="container d-flex align-items-center">
+        <img src="https://i.imgur.com/di90IRh.png" style="height: 100px;" alt="Logo">
+        <span class="ms-3 h3 mb-0 fw-bold">BIKINI BOTTOM - HUNTED E FRIEND LIST</span>
+    </div>
+</nav>
+
+<div class="container">
+    <ul class="nav nav-tabs mb-4" id="radarTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hunted-tab">💀 Hunted List</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#friends-tab">💎 Friends List</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#events-tab">🔔 Atividade Recente</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="hunted-tab">
+            <div class="row" id="huntedGrid"></div>
+        </div>
+        
+        <div class="tab-pane fade" id="friends-tab">
+            <div class="row" id="friendsGrid"></div>
+        </div>
+
+        <div class="tab-pane fade" id="events-tab">
+            <div class="feed-container">
+                <div class="d-flex gap-2 mb-4 flex-wrap">
+                    <button class="btn btn-sm btn-outline-light active" onclick="setFeedFilter('all', this)">TUDO</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="setFeedFilter('hunted', this)">💀 HUNTED</button>
+                    <button class="btn btn-sm btn-outline-info" onclick="setFeedFilter('friend', this)">💎 FRIENDS</button>
+                    <button class="btn btn-sm btn-outline-warning" onclick="setFeedFilter('pvp', this)">⚔️ PVP</button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="setFeedFilter('pve', this)">👾 PVE</button>
+                </div>
+                <div id="globalFeed">
+                    <p class="text-center text-muted py-5">Carregando eventos...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="logModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold" id="modalPlayerName">Logs do Player</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                <div id="modalLogsContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let allLogs = [];
+    let listHunted = {};
+    let listFriends = {};
+    let currentFeedFilter = 'all';
+
+    async function fetchData() {
+        const timestamp = new Date().getTime();
+        try {
+            const [resLogs, resHunted, resFriends] = await Promise.all([
+                fetch(`monitor_data.json?t=${timestamp}`),
+                fetch(`hunted_data.json?t=${timestamp}`),
+                fetch(`friends_data.json?t=${timestamp}`)
+            ]);
+
+            if (resLogs.ok) allLogs = await resLogs.json();
+            if (resHunted.ok) listHunted = await resHunted.json();
+            if (resFriends.ok) listFriends = await resFriends.json();
+
+            renderDashboard();
+            renderGlobalFeed();
+        } catch (e) {
+            console.error("Erro ao sincronizar dados:", e);
+        }
+    }
+
+    function renderDashboard() {
+        const huntedGrid = document.getElementById('huntedGrid');
+        const friendsGrid = document.getElementById('friendsGrid');
+        const playersMap = {};
+
+        Object.entries(listHunted).forEach(([name, lvl]) => {
+            playersMap[name] = { name, level: lvl, status: 'off', type: 'hunted' };
+        });
+        Object.entries(listFriends).forEach(([name, lvl]) => {
+            playersMap[name] = { name, level: lvl, status: 'off', type: 'friend' };
+        });
+
+        const processedPlayers = new Set();
+        allLogs.forEach(event => {
+            if (playersMap[event.name] && !processedPlayers.has(event.name)) {
+                playersMap[event.name].status = event.status;
+                if (event.level !== "---") {
+                    playersMap[event.name].level = event.level;
+                }
+                processedPlayers.add(event.name);
+            }
+        });
+
+        huntedGrid.innerHTML = '';
+        friendsGrid.innerHTML = '';
+
+        const sorted = Object.values(playersMap).sort((a, b) => {
+            if (a.status === b.status) return a.name.localeCompare(b.name);
+            return a.status === 'on' ? -1 : 1;
+        });
+
+        sorted.forEach(player => {
+            const col = document.createElement('div');
+            col.className = 'col-6 col-md-4 col-lg-3';
+            const isOnline = player.status === 'on';
+            
+            col.innerHTML = `
+                <div class="player-card" onclick="showLogs('${player.name}')">
+                    <div class="d-flex align-items-center mb-1">
+                        <span class="status-dot ${isOnline ? 'online' : 'offline'}"></span>
+                        <span class="fw-bold text-truncate text-white">${player.name}</span>
+                    </div>
+                    <div class="small fw-semibold">
+                        <span class="text-white-50">Lvl ${player.level}</span> | 
+                        <span class="${isOnline ? 'text-success' : 'text-secondary'}">${isOnline ? 'ONLINE' : 'OFFLINE'}</span>
+                    </div>
+                </div>
+            `;
+
+            if (player.type === 'friend') friendsGrid.appendChild(col);
+            else huntedGrid.appendChild(col);
+        });
+    }
+
+    function setFeedFilter(filter, btn) {
+        currentFeedFilter = filter;
+        const buttons = btn.parentElement.querySelectorAll('.btn');
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGlobalFeed();
+    }
+
+    function renderGlobalFeed() {
+        const feedContainer = document.getElementById('globalFeed');
+        if (allLogs.length === 0) {
+            feedContainer.innerHTML = '<p class="text-center text-muted py-5">Nenhum evento capturado.</p>';
+            return;
+        }
+
+        const filtered = allLogs.filter(log => {
+            if (currentFeedFilter === 'all') return true;
+            if (currentFeedFilter === 'friend') return log.player_type === 'friend';
+            if (currentFeedFilter === 'hunted') return log.player_type === 'hunted';
+            if (currentFeedFilter === 'pvp') return log.event.toLowerCase() === 'pvp';
+            if (currentFeedFilter === 'pve') return log.event.toLowerCase() === 'pve';
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            feedContainer.innerHTML = '<p class="text-center text-muted py-5">Nenhum log encontrado.</p>';
+            return;
+        }
+
+        feedContainer.innerHTML = filtered.map(log => {
+            const isFriend = log.player_type === 'friend';
+            const eventType = (log.event || "").toLowerCase();
+            
+            let rowStyle = "";
+            if (eventType === 'pvp') {
+                rowStyle = 'background: rgba(255, 0, 0, 0.12); border-left: 4px solid #ff0000; padding-left: 10px;';
+            } else if (eventType === 'pve') {
+                rowStyle = 'background: rgba(0, 123, 255, 0.08); border-left: 4px solid #007bff; padding-left: 10px;';
+            }
+
+            return `
+                <div class="log-entry" style="${rowStyle}">
+                    <span class="text-success small fw-bold">[${log.datetime}]</span> 
+                    <span class="${isFriend ? 'text-info' : 'text-danger'} fw-bold">${isFriend ? '💎' : '💀'} ${log.name}</span> 
+                    <span class="text-white-50">(${log.level})</span> - 
+                    <strong class="text-white">${log.event.toUpperCase()}</strong>: 
+                    <span class="text-white-50">${log.details}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function showLogs(playerName) {
+        const modalTitle = document.getElementById('modalPlayerName');
+        const modalBody = document.getElementById('modalLogsContent');
+        modalTitle.innerText = `Atividade: ${playerName}`;
+        
+        const logs = allLogs.filter(e => e.name === playerName);
+        
+        if (logs.length === 0) {
+            modalBody.innerHTML = '<div class="text-center py-5 text-muted">Sem registros de atividade.</div>';
+        } else {
+            modalBody.innerHTML = logs.map(log => `
+                <div class="log-entry">
+                    <span class="text-success fw-bold">[${log.datetime}]</span> 
+                    <span class="text-info fw-bold">Lvl ${log.level}</span> - 
+                    <span class="text-white fw-bold">${log.event.toUpperCase()}</span>: 
+                    <span class="text-white-50">${log.details}</span>
+                </div>
+            `).join('');
+        }
+
+        new bootstrap.Modal(document.getElementById('logModal')).show();
+    }
+
+    setInterval(fetchData, 5000);
+    fetchData();
+</script>
+</body>
+</html>
