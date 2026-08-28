@@ -8,18 +8,15 @@ import asyncio
 from gtts import gTTS
 
 # ================= CONFIGURAÇÕES =================
-TOKEN = "MTQ5MjAzMzMxODY1OTgyMTYxOQ.GCWike.9D6O8qGlZ5l86NBVdFS3O0Fko5JmCkBTTDF254"
-CHANNEL_ID = 1492203477689176144
-CHANNEL_FRIENDS = 1494019202053570621
+TOKEN = ""
+CHANNEL_ID = 
+CHANNEL_FRIENDS = 
 FILE = "hunted_data.json"
 FILE_FRIENDS = "friends_data.json"
 WEB_JSON = "monitor_data.json" 
 
 AUTHORIZED_IDS = [
-    315481947772157953,
-    773068934630604800,
-    192343484860989440,
-    604349229984645149
+
 ]
 
 browser_instance = None
